@@ -1,0 +1,10 @@
+<CodeGenerationInfo>
+  <ToolchainSettings />
+  <GeneratedFilesList>
+    <GeneratedByDI>
+      <File Name="Sources\MCUinit.c" FileDate="2012-10-13, 23:32:28" FileAge="1350185548354" FileType="130" />
+      <File Name="Sources\MCUinit.h" FileDate="2012-10-13, 23:32:28" FileAge="1350185548412" FileType="130" />
+    </GeneratedByDI>
+  </GeneratedFilesList>
+  <CodeGenReference>6</CodeGenReference>
+</CodeGenerationInfo>
