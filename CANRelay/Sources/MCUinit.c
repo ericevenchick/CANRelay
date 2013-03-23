@@ -9,7 +9,7 @@
 **     Processor   : MC9S08DZ32CLC
 **     Version     : Component 01.043, Driver 01.08, CPU db: 3.00.025
 **     Datasheet   : MC9S08DZ60 Rev. 3 10/2007
-**     Date/Time   : 2013-03-02, 20:57, # CodeGen: 0
+**     Date/Time   : 2013-03-23, 17:31, # CodeGen: 1
 **     Abstract    :
 **         This module contains device initialization code 
 **         for selected on-chip peripherals.
@@ -202,7 +202,6 @@ void MCU_init(void)
 __interrupt void isrVcantx(void)
 {
   /* Write your interrupt code here ... */
-
 }
 /* end of isrVcantx */
 
@@ -220,7 +219,7 @@ __interrupt void isrVcantx(void)
 __interrupt void isrVcanrx(void)
 {
   /* Write your interrupt code here ... */
-
+	can_rx_ISR();
 }
 /* end of isrVcanrx */
 

@@ -2,7 +2,7 @@
 # Automatically-generated file. Do not edit!
 ################################################################################
 
-#Progress monitor hint: 4
+#Progress monitor hint: 6
 first : all
 -include ../makefile.init
 
@@ -79,14 +79,14 @@ endif
 # Tool invocations
 CANRelay.abs: $(OBJS) $(USER_OBJS) ../Project_Settings/Linker_Files/Project.prm
 	@echo 'Building target: $@'
-	@echo 'Executing target #5 $@'
+	@echo 'Executing target #7 $@'
 	@echo 'Invoking: S08 Linker'
 	"$(HC08ToolsEnv)/linker" -ArgFile"CANRelay.args" -O"CANRelay.abs"
 	@echo 'Finished building target: $@'
 	@echo ' '
 
 CANRelay.abs.s19: $(BBL_SRCS) $(EXECUTABLES)
-	@echo 'Executing target #6 $@'
+	@echo 'Executing target #8 $@'
 	@echo 'Invoking: S08 Burner'
 	"$(HC08ToolsEnv)/burner" -ArgFile"CANRelay.abs.args" -f="$<" -env"ABS_FILE=$(strip $(EXECUTABLES_OS_FORMAT))"
 	@echo 'Finished building: $@'
@@ -94,7 +94,7 @@ CANRelay.abs.s19: $(BBL_SRCS) $(EXECUTABLES)
 
 # Other Targets
 clean:
-	-$(RM) "./*/*.obj" "./*/*/*.obj"  $(CPP_DEPS_QUOTED) $(CC_DEPS_QUOTED) $(CXX_DEPS_QUOTED) $(BURNER_OUTPUT_OUTPUTS_QUOTED) $(C_UPPER_DEPS_QUOTED) $(C++_DEPS_QUOTED) $(EXECUTABLES_QUOTED) "./*/*.d" "./*/*/*.d"  $(ProjDirPath)/FLASH/CANRelay.abs
+	-$(RM) "./*/*.obj" "./*/*/*.obj"  $(CPP_DEPS_QUOTED) $(CC_DEPS_QUOTED) $(CXX_DEPS_QUOTED) $(BURNER_OUTPUT_OUTPUTS_QUOTED) $(C_UPPER_DEPS_QUOTED) $(C++_DEPS_QUOTED) $(EXECUTABLES_QUOTED) "./*/*.d" "./*/*/*.d"  $(ProjDirPath)/FLASH/CANRelay.abs $(ProjDirPath)/FLASH/CANRelay.abs.args $(ProjDirPath)/FLASH/CANRelay.abs.s19 $(ProjDirPath)/FLASH/CANRelay.args $(ProjDirPath)/FLASH/CANRelay.map
 	-@echo ' '
 
 .PHONY: all clean dependents

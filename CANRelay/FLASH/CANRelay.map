@@ -13,7 +13,9 @@ Linker      : SmartLinker V-5.0.49 Build 12319, Nov 15 2012
 FILE SECTION
 ---------------------------------------------------------------------------------------------
 MCUinit_c.obj                           Model: SMALL,         Lang: ANSI-C
+can_c.obj                               Model: SMALL,         Lang: ANSI-C
 main_c.obj                              Model: SMALL,         Lang: ANSI-C
+relay_c.obj                             Model: SMALL,         Lang: ANSI-C
 start08_c.obj                           Model: SMALL,         Lang: ANSI-C
 mc9s08dz32_c.obj                        Model: SMALL,         Lang: ANSI-C
 rtshc08.o (ansiis.lib)                  Model: SMALL,         Lang: ANSI-C
@@ -25,7 +27,7 @@ Entry point: 0x7C7B (_Startup)
 _startupData is allocated at 0x7C84 and uses 6 Bytes
 extern struct _tagStartup {
   unsigned nofZeroOut     0
-  _Copy    *toCopyDownBeg 0x7EC6
+  _Copy    *toCopyDownBeg 0x7FF4
 } _startupData;
 
 *********************************************************************************************
@@ -34,8 +36,8 @@ Section Name                    Size  Type     From       To       Segment
 ---------------------------------------------------------------------------------------------
 .init                            132     R     0x7C00     0x7C83   ROM
 .startData                        14     R     0x7C84     0x7C91   ROM
-.text                            564     R     0x7C92     0x7EC5   ROM
-.copy                              2     R     0x7EC6     0x7EC7   ROM
+.text                            866     R     0x7C92     0x7FF3   ROM
+.copy                              2     R     0x7FF4     0x7FF5   ROM
 .abs_section_ffbd                  1     R     0xFFBD     0xFFBD   .absSeg0
 .abs_section_ffbf                  1     R     0xFFBF     0xFFBF   .absSeg1
 .abs_section_ffc0                 64     R     0xFFC0     0xFFFF   .absSeg2
@@ -225,7 +227,7 @@ Section Name                    Size  Type     From       To       Segment
 .stack                           128   R/W      0x100      0x17F   RAM
 
 Summary of section sizes per section type:
-READ_ONLY (R):         30A (dec:      778)
+READ_ONLY (R):         438 (dec:     1080)
 READ_WRITE (R/W):       80 (dec:      128)
 NO_INIT (N/I):          D3 (dec:      211)
 
@@ -242,16 +244,25 @@ MODULE:                 -- MCUinit_c.obj --
 - PROCEDURES:
      MCU_init                                  7C92      DD     221       1   .text       
      isrVcantx                                 7D6F       1       1       1   .text       
-     isrVcanrx                                 7D70       1       1       1   .text       
-     isrVcanerr                                7D71       1       1       1   .text       
-     isrVcanwu                                 7D72       1       1       1   .text       
+     isrVcanrx                                 7D70       6       6       1   .text       
+     isrVcanerr                                7D76       1       1       1   .text       
+     isrVcanwu                                 7D77       1       1       1   .text       
 - VARIABLES:
      NVPROT_INIT                               FFBD       1       1       0   .abs_section_ffbd
      NVOPT_INIT                                FFBF       1       1       0   .abs_section_ffbf
      _vect                                     FFC0      40      64       0   .abs_section_ffc0
+MODULE:                 -- can_c.obj --
+- PROCEDURES:
+     can_rx_ISR                                7D78      7C     124       1   .text       
+     can_send_msg                              7DF4      58      88       1   .text       
+- VARIABLES:
 MODULE:                 -- main_c.obj --
 - PROCEDURES:
-     main                                      7D73      9C     156       1   .text       
+     main                                      7E4C      3B      59       1   .text       
+- VARIABLES:
+MODULE:                 -- relay_c.obj --
+- PROCEDURES:
+     set_relays                                7E87      93     147       1   .text       
 - VARIABLES:
 MODULE:                 -- start08_c.obj --
 - PROCEDURES:
@@ -265,7 +276,7 @@ MODULE:                 -- start08_c.obj --
 MODULE:                 -- mc9s08dz32_c.obj --
 - PROCEDURES:
 - VARIABLES:
-     _PTAD                                        0       1       1      17   .abs_section_0
+     _PTAD                                        0       1       1      18   .abs_section_0
      _PTADD                                       1       1       1       1   .abs_section_1
      _PTBD                                        2       1       1       6   .abs_section_2
      _PTBDD                                       3       1       1       2   .abs_section_3
@@ -329,12 +340,12 @@ MODULE:                 -- mc9s08dz32_c.obj --
      _RTCSC                                      6C       1       1       0   .abs_section_6c
      _RTCCNT                                     6D       1       1       0   .abs_section_6d
      _RTCMOD                                     6E       1       1       0   .abs_section_6e
-     _SRS                                      1800       1       1       1   .abs_section_1800
+     _SRS                                      1800       1       1       0   .abs_section_1800
      _SBDFR                                    1801       1       1       0   .abs_section_1801
-     _SOPT1                                    1802       1       1       2   .abs_section_1802
+     _SOPT1                                    1802       1       1       1   .abs_section_1802
      _SOPT2                                    1803       1       1       1   .abs_section_1803
-     _SPMSC1                                   1809       1       1       2   .abs_section_1809
-     _SPMSC2                                   180A       1       1       2   .abs_section_180a
+     _SPMSC1                                   1809       1       1       1   .abs_section_1809
+     _SPMSC2                                   180A       1       1       1   .abs_section_180a
      _DBGC                                     1816       1       1       0   .abs_section_1816
      _DBGT                                     1817       1       1       0   .abs_section_1817
      _DBGS                                     1818       1       1       0   .abs_section_1818
@@ -378,13 +389,13 @@ MODULE:                 -- mc9s08dz32_c.obj --
      _CANCTL1                                  1881       1       1       2   .abs_section_1881
      _CANBTR0                                  1882       1       1       1   .abs_section_1882
      _CANBTR1                                  1883       1       1       1   .abs_section_1883
-     _CANRFLG                                  1884       1       1       0   .abs_section_1884
+     _CANRFLG                                  1884       1       1       1   .abs_section_1884
      _CANRIER                                  1885       1       1       0   .abs_section_1885
-     _CANTFLG                                  1886       1       1       0   .abs_section_1886
+     _CANTFLG                                  1886       1       1       2   .abs_section_1886
      _CANTIER                                  1887       1       1       0   .abs_section_1887
      _CANTARQ                                  1888       1       1       0   .abs_section_1888
      _CANTAAK                                  1889       1       1       0   .abs_section_1889
-     _CANTBSEL                                 188A       1       1       0   .abs_section_188a
+     _CANTBSEL                                 188A       1       1       2   .abs_section_188a
      _CANIDAC                                  188B       1       1       1   .abs_section_188b
      _CANMISC                                  188D       1       1       0   .abs_section_188d
      _CANRXERR                                 188E       1       1       0   .abs_section_188e
@@ -405,24 +416,24 @@ MODULE:                 -- mc9s08dz32_c.obj --
      _CANIDMR5                                 189D       1       1       1   .abs_section_189d
      _CANIDMR6                                 189E       1       1       1   .abs_section_189e
      _CANIDMR7                                 189F       1       1       1   .abs_section_189f
-     _CANRDSR0                                 18A4       1       1       0   .abs_section_18a4
-     _CANRDSR1                                 18A5       1       1       0   .abs_section_18a5
-     _CANRDSR2                                 18A6       1       1       0   .abs_section_18a6
-     _CANRDSR3                                 18A7       1       1       0   .abs_section_18a7
-     _CANRDSR4                                 18A8       1       1       0   .abs_section_18a8
-     _CANRDSR5                                 18A9       1       1       0   .abs_section_18a9
-     _CANRDSR6                                 18AA       1       1       0   .abs_section_18aa
-     _CANRDSR7                                 18AB       1       1       0   .abs_section_18ab
-     _CANRDLR                                  18AC       1       1       0   .abs_section_18ac
-     _CANTDSR0                                 18B4       1       1       0   .abs_section_18b4
-     _CANTDSR1                                 18B5       1       1       0   .abs_section_18b5
-     _CANTDSR2                                 18B6       1       1       0   .abs_section_18b6
-     _CANTDSR3                                 18B7       1       1       0   .abs_section_18b7
-     _CANTDSR4                                 18B8       1       1       0   .abs_section_18b8
-     _CANTDSR5                                 18B9       1       1       0   .abs_section_18b9
-     _CANTDSR6                                 18BA       1       1       0   .abs_section_18ba
-     _CANTDSR7                                 18BB       1       1       0   .abs_section_18bb
-     _CANTDLR                                  18BC       1       1       0   .abs_section_18bc
+     _CANRDSR0                                 18A4       1       1       1   .abs_section_18a4
+     _CANRDSR1                                 18A5       1       1       1   .abs_section_18a5
+     _CANRDSR2                                 18A6       1       1       1   .abs_section_18a6
+     _CANRDSR3                                 18A7       1       1       1   .abs_section_18a7
+     _CANRDSR4                                 18A8       1       1       1   .abs_section_18a8
+     _CANRDSR5                                 18A9       1       1       1   .abs_section_18a9
+     _CANRDSR6                                 18AA       1       1       1   .abs_section_18aa
+     _CANRDSR7                                 18AB       1       1       1   .abs_section_18ab
+     _CANRDLR                                  18AC       1       1       1   .abs_section_18ac
+     _CANTDSR0                                 18B4       1       1       1   .abs_section_18b4
+     _CANTDSR1                                 18B5       1       1       1   .abs_section_18b5
+     _CANTDSR2                                 18B6       1       1       1   .abs_section_18b6
+     _CANTDSR3                                 18B7       1       1       1   .abs_section_18b7
+     _CANTDSR4                                 18B8       1       1       1   .abs_section_18b8
+     _CANTDSR5                                 18B9       1       1       1   .abs_section_18b9
+     _CANTDSR6                                 18BA       1       1       1   .abs_section_18ba
+     _CANTDSR7                                 18BB       1       1       1   .abs_section_18bb
+     _CANTDLR                                  18BC       1       1       1   .abs_section_18bc
      _CANTTBPR                                 18BD       1       1       0   .abs_section_18bd
      _ADCR                                       12       2       2       0   .abs_section_12
      _ADCCV                                      14       2       2       0   .abs_section_14
@@ -446,36 +457,41 @@ MODULE:                 -- mc9s08dz32_c.obj --
      _DBGF                                     1814       2       2       0   .abs_section_1814
      _CANRTSR                                  18AE       2       2       0   .abs_section_18ae
      _CANTTSR                                  18BE       2       2       0   .abs_section_18be
-     _CANRIDR                                  18A0       4       4       0   .abs_section_18a0
-     _CANTIDR                                  18B0       4       4       0   .abs_section_18b0
+     _CANRIDR                                  18A0       4       4       2   .abs_section_18a0
+     _CANTIDR                                  18B0       4       4       2   .abs_section_18b0
 MODULE:                 -- rtshc08.o (ansiis.lib) --
 - PROCEDURES:
-     _PUSH_ARGS_L                              7E0F      20      32       1   .text       
-     _ENTER_UNARY_L                            7E2F      29      41       1   .text       
-     _ENTER_BINARY_L_RC                        7E58      19      25       1   .text       
-     _LCMP_k_rel_j                             7E71      1F      31       1   .text       
-     _LINC                                     7E90      16      22       2   .text       
-     _LCMP_RC                                  7EA6       6       6       2   .text       
-     _POP32                                    7EAC      1A      26       2   .text       
+     _PUSH_ARGS_L                              7F1A      20      32       1   .text       
+     _ENTER_UNARY_L                            7F3A      29      41       2   .text       
+     _ENTER_BINARY_L_RC                        7F63      19      25       1   .text       
+     _LCMP_k_rel_j                             7F7C      1F      31       1   .text       
+     _LINC                                     7F9B      16      22       1   .text       
+     _LASR                                     7FB1      16      22       1   .text       
+     _LCMP_RC                                  7FC7       6       6       1   .text       
+     _POP32                                    7FCD      1A      26       2   .text       
+     _SEXT16_32                                7FE7       D      13       1   .text       
 - VARIABLES:
 
 *********************************************************************************************
 MODULE STATISTIC
   Name                                      Data   Code  Const
 ---------------------------------------------------------------------------------------------
-  MCUinit_c.obj                                0    225     66
-  main_c.obj                                   0    156      0
+  MCUinit_c.obj                                0    230     66
+  can_c.obj                                    0    212      0
+  main_c.obj                                   0     59      0
+  relay_c.obj                                  0    147      0
   start08_c.obj                                0    132      0
   mc9s08dz32_c.obj                           211      0      0
-  rtshc08.o (ansiis.lib)                       0    183      0
+  rtshc08.o (ansiis.lib)                       0    218      0
   other                                      128     14      2
 
 *********************************************************************************************
 SECTION USE IN OBJECT-ALLOCATION SECTION
 ---------------------------------------------------------------------------------------------
 SECTION: ".text"
-  MCU_init isrVcantx isrVcanrx isrVcanerr isrVcanwu main _PUSH_ARGS_L 
-  _ENTER_UNARY_L _ENTER_BINARY_L_RC _LCMP_k_rel_j _LINC _LCMP_RC _POP32 
+  MCU_init isrVcantx isrVcanrx isrVcanerr isrVcanwu can_rx_ISR can_send_msg 
+  main set_relays _PUSH_ARGS_L _ENTER_UNARY_L _ENTER_BINARY_L_RC _LCMP_k_rel_j 
+  _LINC _LASR _LCMP_RC _POP32 _SEXT16_32 
 SECTION: ".init"
   loadByte Init _Startup 
 SECTION: ".abs_section_ffbd"
@@ -855,7 +871,7 @@ SECTION: ".abs_section_18b0"
 OBJECT LIST SORTED BY ADDRESS
      Name                                      Addr   hSize   dSize     Ref    Section   RLIB
 ---------------------------------------------------------------------------------------------
-     _PTAD                                        0       1       1      17   .abs_section_0
+     _PTAD                                        0       1       1      18   .abs_section_0
      _PTADD                                       1       1       1       1   .abs_section_1
      _PTBD                                        2       1       1       6   .abs_section_2
      _PTBDD                                       3       1       1       2   .abs_section_3
@@ -935,13 +951,13 @@ OBJECT LIST SORTED BY ADDRESS
      _RTCSC                                      6C       1       1       0   .abs_section_6c
      _RTCCNT                                     6D       1       1       0   .abs_section_6d
      _RTCMOD                                     6E       1       1       0   .abs_section_6e
-     _SRS                                      1800       1       1       1   .abs_section_1800
+     _SRS                                      1800       1       1       0   .abs_section_1800
      _SBDFR                                    1801       1       1       0   .abs_section_1801
-     _SOPT1                                    1802       1       1       2   .abs_section_1802
+     _SOPT1                                    1802       1       1       1   .abs_section_1802
      _SOPT2                                    1803       1       1       1   .abs_section_1803
      _SDID                                     1806       2       2       0   .abs_section_1806
-     _SPMSC1                                   1809       1       1       2   .abs_section_1809
-     _SPMSC2                                   180A       1       1       2   .abs_section_180a
+     _SPMSC1                                   1809       1       1       1   .abs_section_1809
+     _SPMSC2                                   180A       1       1       1   .abs_section_180a
      _DBGCA                                    1810       2       2       0   .abs_section_1810
      _DBGCB                                    1812       2       2       0   .abs_section_1812
      _DBGF                                     1814       2       2       0   .abs_section_1814
@@ -988,13 +1004,13 @@ OBJECT LIST SORTED BY ADDRESS
      _CANCTL1                                  1881       1       1       2   .abs_section_1881
      _CANBTR0                                  1882       1       1       1   .abs_section_1882
      _CANBTR1                                  1883       1       1       1   .abs_section_1883
-     _CANRFLG                                  1884       1       1       0   .abs_section_1884
+     _CANRFLG                                  1884       1       1       1   .abs_section_1884
      _CANRIER                                  1885       1       1       0   .abs_section_1885
-     _CANTFLG                                  1886       1       1       0   .abs_section_1886
+     _CANTFLG                                  1886       1       1       2   .abs_section_1886
      _CANTIER                                  1887       1       1       0   .abs_section_1887
      _CANTARQ                                  1888       1       1       0   .abs_section_1888
      _CANTAAK                                  1889       1       1       0   .abs_section_1889
-     _CANTBSEL                                 188A       1       1       0   .abs_section_188a
+     _CANTBSEL                                 188A       1       1       2   .abs_section_188a
      _CANIDAC                                  188B       1       1       1   .abs_section_188b
      _CANMISC                                  188D       1       1       0   .abs_section_188d
      _CANRXERR                                 188E       1       1       0   .abs_section_188e
@@ -1015,27 +1031,27 @@ OBJECT LIST SORTED BY ADDRESS
      _CANIDMR5                                 189D       1       1       1   .abs_section_189d
      _CANIDMR6                                 189E       1       1       1   .abs_section_189e
      _CANIDMR7                                 189F       1       1       1   .abs_section_189f
-     _CANRIDR                                  18A0       4       4       0   .abs_section_18a0
-     _CANRDSR0                                 18A4       1       1       0   .abs_section_18a4
-     _CANRDSR1                                 18A5       1       1       0   .abs_section_18a5
-     _CANRDSR2                                 18A6       1       1       0   .abs_section_18a6
-     _CANRDSR3                                 18A7       1       1       0   .abs_section_18a7
-     _CANRDSR4                                 18A8       1       1       0   .abs_section_18a8
-     _CANRDSR5                                 18A9       1       1       0   .abs_section_18a9
-     _CANRDSR6                                 18AA       1       1       0   .abs_section_18aa
-     _CANRDSR7                                 18AB       1       1       0   .abs_section_18ab
-     _CANRDLR                                  18AC       1       1       0   .abs_section_18ac
+     _CANRIDR                                  18A0       4       4       2   .abs_section_18a0
+     _CANRDSR0                                 18A4       1       1       1   .abs_section_18a4
+     _CANRDSR1                                 18A5       1       1       1   .abs_section_18a5
+     _CANRDSR2                                 18A6       1       1       1   .abs_section_18a6
+     _CANRDSR3                                 18A7       1       1       1   .abs_section_18a7
+     _CANRDSR4                                 18A8       1       1       1   .abs_section_18a8
+     _CANRDSR5                                 18A9       1       1       1   .abs_section_18a9
+     _CANRDSR6                                 18AA       1       1       1   .abs_section_18aa
+     _CANRDSR7                                 18AB       1       1       1   .abs_section_18ab
+     _CANRDLR                                  18AC       1       1       1   .abs_section_18ac
      _CANRTSR                                  18AE       2       2       0   .abs_section_18ae
-     _CANTIDR                                  18B0       4       4       0   .abs_section_18b0
-     _CANTDSR0                                 18B4       1       1       0   .abs_section_18b4
-     _CANTDSR1                                 18B5       1       1       0   .abs_section_18b5
-     _CANTDSR2                                 18B6       1       1       0   .abs_section_18b6
-     _CANTDSR3                                 18B7       1       1       0   .abs_section_18b7
-     _CANTDSR4                                 18B8       1       1       0   .abs_section_18b8
-     _CANTDSR5                                 18B9       1       1       0   .abs_section_18b9
-     _CANTDSR6                                 18BA       1       1       0   .abs_section_18ba
-     _CANTDSR7                                 18BB       1       1       0   .abs_section_18bb
-     _CANTDLR                                  18BC       1       1       0   .abs_section_18bc
+     _CANTIDR                                  18B0       4       4       2   .abs_section_18b0
+     _CANTDSR0                                 18B4       1       1       1   .abs_section_18b4
+     _CANTDSR1                                 18B5       1       1       1   .abs_section_18b5
+     _CANTDSR2                                 18B6       1       1       1   .abs_section_18b6
+     _CANTDSR3                                 18B7       1       1       1   .abs_section_18b7
+     _CANTDSR4                                 18B8       1       1       1   .abs_section_18b8
+     _CANTDSR5                                 18B9       1       1       1   .abs_section_18b9
+     _CANTDSR6                                 18BA       1       1       1   .abs_section_18ba
+     _CANTDSR7                                 18BB       1       1       1   .abs_section_18bb
+     _CANTDLR                                  18BC       1       1       1   .abs_section_18bc
      _CANTTBPR                                 18BD       1       1       0   .abs_section_18bd
      _CANTTSR                                  18BE       2       2       0   .abs_section_18be
      loadByte                                  7C00       E      14       5   .init       
@@ -1043,17 +1059,22 @@ OBJECT LIST SORTED BY ADDRESS
      _Startup                                  7C7B       9       9       1   .init       
      MCU_init                                  7C92      DD     221       1   .text       
      isrVcantx                                 7D6F       1       1       1   .text       
-     isrVcanrx                                 7D70       1       1       1   .text       
-     isrVcanerr                                7D71       1       1       1   .text       
-     isrVcanwu                                 7D72       1       1       1   .text       
-     main                                      7D73      9C     156       1   .text       
-     _PUSH_ARGS_L                              7E0F      20      32       1   .text       
-     _ENTER_UNARY_L                            7E2F      29      41       1   .text       
-     _ENTER_BINARY_L_RC                        7E58      19      25       1   .text       
-     _LCMP_k_rel_j                             7E71      1F      31       1   .text       
-     _LINC                                     7E90      16      22       2   .text       
-     _LCMP_RC                                  7EA6       6       6       2   .text       
-     _POP32                                    7EAC      1A      26       2   .text       
+     isrVcanrx                                 7D70       6       6       1   .text       
+     isrVcanerr                                7D76       1       1       1   .text       
+     isrVcanwu                                 7D77       1       1       1   .text       
+     can_rx_ISR                                7D78      7C     124       1   .text       
+     can_send_msg                              7DF4      58      88       1   .text       
+     main                                      7E4C      3B      59       1   .text       
+     set_relays                                7E87      93     147       1   .text       
+     _PUSH_ARGS_L                              7F1A      20      32       1   .text       
+     _ENTER_UNARY_L                            7F3A      29      41       2   .text       
+     _ENTER_BINARY_L_RC                        7F63      19      25       1   .text       
+     _LCMP_k_rel_j                             7F7C      1F      31       1   .text       
+     _LINC                                     7F9B      16      22       1   .text       
+     _LASR                                     7FB1      16      22       1   .text       
+     _LCMP_RC                                  7FC7       6       6       1   .text       
+     _POP32                                    7FCD      1A      26       2   .text       
+     _SEXT16_32                                7FE7       D      13       1   .text       
      NVPROT_INIT                               FFBD       1       1       0   .abs_section_ffbd
      NVOPT_INIT                                FFBF       1       1       0   .abs_section_ffbf
      _vect                                     FFC0      40      64       0   .abs_section_ffc0
@@ -1062,6 +1083,8 @@ OBJECT LIST SORTED BY ADDRESS
 UNUSED-OBJECTS SECTION
 ---------------------------------------------------------------------------------------------
 NOT USED PROCEDURES
+main_c.obj:
+  sleep 
 rtshc08.o (ansiis.lib):
   _PUSH_ARGS_D _ENTER_UNARY_L64 _ENTER_UNARY_L64_4 _ENTER_BINARY_L 
   _ENTER_BINARY_L_LC _ENTER_BINARY_L64 _ENTER_BINARY_L64_LC 
@@ -1074,13 +1097,13 @@ rtshc08.o (ansiis.lib):
   _IASR _ILSR _ILSL _ICMP _LDEC _LNEG _LNOT _LADD _LADD_RC _LSUB _LSUB_LC 
   _LSUB_RC _LAND _LAND_RC _LOR _LOR_RC _LXOR _LXOR_RC _LMUL _LMUL_RC _LDIVS 
   _LDIVS_LC _LDIVS_RC _LDIVU _LDIVU_LC _LDIVU_RC _LMODS _LMODS_LC _LMODS_RC 
-  _LMODU _LMODU_LC _LMODU_RC _LASR _LLSR _LLSL _LCMP _PUSH_ARGS_24 
+  _LMODU _LMODU_LC _LMODU_RC _LLSR _LLSL _LCMP _PUSH_ARGS_24 
   _ENTER_BINARY_24_RC _ENTER_BINARY_24 _CMP24 _CMP24_RC _COPY _COPY_L _POP64 
-  _STORE32 _STORE64 _SEXT8_32 _SEXT16_32 _CALL_STAR08 _CALL_STAR08_FAR 
-  _Jump_Table_Addr _Jump_Table_Offset _Jump_Table_Header_Addr 
-  _Jump_Table_Header_Offset _Search_Table_16_Addr _Search_Table_16_Offset 
-  _Search_Table_8_Addr _Search_Table_8_Offset _PUSH_CC _POP_CC 
-  _CONV_FAR_TO_NEAR _CONV_FAR_TO_LINEAR _CONV_LINEAR_TO_FAR 
+  _STORE32 _STORE64 _SEXT8_32 _CALL_STAR08 _CALL_STAR08_FAR _Jump_Table_Addr 
+  _Jump_Table_Offset _Jump_Table_Header_Addr _Jump_Table_Header_Offset 
+  _Search_Table_16_Addr _Search_Table_16_Offset _Search_Table_8_Addr 
+  _Search_Table_8_Offset _PUSH_CC _POP_CC _CONV_FAR_TO_NEAR _CONV_FAR_TO_LINEAR 
+  _CONV_LINEAR_TO_FAR 
 NOT USED VARIABLES
 rtshc08.o (ansiis.lib):
   _PowOfTwo_8 _PowOfTwo_16 _PowOfTwo_32 errno 
@@ -1088,7 +1111,7 @@ rtshc08.o (ansiis.lib):
 *********************************************************************************************
 COPYDOWN SECTION
 ---------------------------------------------------------------------------------------------
-------- ROM-ADDRESS: 0x7EC6 ---- SIZE       2 ---
+------- ROM-ADDRESS: 0x7FF4 ---- SIZE       2 ---
 Filling bytes inserted
  0000
 
@@ -1105,10 +1128,19 @@ MCU_init                  USES _SOPT1 _SOPT2 _SPMSC1 _SPMSC2 _MCGTRM _MCGSC
                                 _CANIDAR1 _CANIDAR2 _CANIDAR3 _CANIDAR4 _CANIDAR5 
                                 _CANIDAR6 _CANIDAR7 _CANIDMR0 _CANIDMR1 _CANIDMR2 
                                 _CANIDMR3 _CANIDMR4 _CANIDMR5 _CANIDMR6 _CANIDMR7 
-main                      USES MCU_init _SOPT1 _SPMSC1 _SPMSC2 _PTAD _PTBD 
-                                _PTDD _PTED _LINC _POP32 _LCMP_RC _SRS 
+isrVcanrx                 USES can_rx_ISR 
+can_rx_ISR                USES _CANRIDR _SEXT16_32 _POP32 _CANRDLR _CANRDSR0 
+                                _CANRDSR1 _CANRDSR2 _CANRDSR3 _CANRDSR4 _CANRDSR5 
+                                _CANRDSR6 _CANRDSR7 set_relays _CANRFLG 
+can_send_msg              USES _CANTFLG _CANTBSEL _CANTIDR _LASR _CANTDLR 
+                                _CANTDSR0 _CANTDSR1 _CANTDSR2 _CANTDSR3 _CANTDSR4 
+                                _CANTDSR5 _CANTDSR6 _CANTDSR7 
+main                      USES MCU_init _PTAD can_send_msg _LINC _POP32 
+                                _LCMP_RC 
+set_relays                USES _PTAD _PTBD _PTDD _PTED 
 _ENTER_BINARY_L_RC        USES _PUSH_ARGS_L 
 _LINC                     USES _ENTER_UNARY_L 
+_LASR                     USES _ENTER_UNARY_L 
 _LCMP_RC                  USES _ENTER_BINARY_L_RC _LCMP_k_rel_j 
 _vect                     USES isrVcantx isrVcanrx isrVcanerr isrVcanwu 
                                 _Startup 
@@ -1122,10 +1154,16 @@ DEPENDENCY TREE
  |  | 
  |  +- MCU_init            
  |  |    
+ |  +- can_send_msg        
+ |  |  | 
+ |  |  +- _LASR               
+ |  |     | 
+ |  |     +- _ENTER_UNARY_L      
+ |  |          
  |  +- _LINC               
  |  |  | 
- |  |  +- _ENTER_UNARY_L      
- |  |       
+ |  |  +- _ENTER_UNARY_L       (see above)
+ |  |     
  |  +- _POP32              
  |  |    
  |  +- _LCMP_RC            
@@ -1149,7 +1187,15 @@ DEPENDENCY TREE
  +- isrVcantx           
  |    
  +- isrVcanrx           
- |    
+ |  | 
+ |  +- can_rx_ISR          
+ |     | 
+ |     +- _SEXT16_32          
+ |     |    
+ |     +- _POP32               (see above)
+ |     |  
+ |     +- set_relays          
+ |          
  +- isrVcanerr          
  |    
  +- isrVcanwu           
@@ -1162,6 +1208,6 @@ STATISTIC SECTION
 
 ExeFile:
 --------
-Number of blocks to be downloaded: 5
-Total size of all blocks to be downloaded: 778
+Number of blocks to be downloaded: 6
+Total size of all blocks to be downloaded: 1080
 

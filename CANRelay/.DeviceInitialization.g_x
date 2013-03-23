@@ -2,9 +2,9 @@
   <ToolchainSettings />
   <GeneratedFilesList>
     <GeneratedByDI>
-      <File Name="Sources\MCUinit.c" FileDate="2013-03-02, 20:57:17" FileAge="1362275837375" FileType="130" />
-      <File Name="Sources\MCUinit.h" FileDate="2013-03-02, 20:57:17" FileAge="1362275837396" FileType="130" />
+      <File Name="Sources\MCUinit.c" FileDate="2013-03-23, 17:31:57" FileAge="1364074317673" FileType="130" />
+      <File Name="Sources\MCUinit.h" FileDate="2013-03-23, 17:31:57" FileAge="1364074317703" FileType="130" />
     </GeneratedByDI>
   </GeneratedFilesList>
-  <CodeGenReference>1</CodeGenReference>
+  <CodeGenReference>2</CodeGenReference>
 </CodeGenerationInfo>
